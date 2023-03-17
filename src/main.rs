@@ -20,11 +20,15 @@ fn main() -> Result<()> {
     let Args { user, token, info } = Args::from_args();
 
     // read the entire stdin buffer to use as the output message
-    let input = std::io::stdin()
-        .lines()
-        .flatten()
-        .collect::<Vec<_>>()
-        .join("\n");
+    let input = if atty::is(atty::Stream::Stdin) {
+        std::io::stdin()
+            .lines()
+            .flatten()
+            .collect::<Vec<_>>()
+            .join("\n")
+    } else {
+        "".to_string()
+    };
 
     let content = info
         .map(|info| format!("> {info}\n```\n{input}\n```"))

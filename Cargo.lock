@@ -106,6 +106,7 @@ name = "discord-notifier"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "atty",
  "reqwest",
  "serde_json",
  "structopt",
