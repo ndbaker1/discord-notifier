@@ -14,20 +14,28 @@ struct Args {
     /// Additional header info for the message
     #[structopt(short = "i", long)]
     info: Option<String>,
+    /// Flag to control whether stdin should be read to contruct the message
+    #[structopt(short = "r", long)]
+    read_stdin: bool,
 }
 
 fn main() -> Result<()> {
-    let Args { user, token, info } = Args::from_args();
+    let Args {
+        user,
+        token,
+        info,
+        read_stdin,
+    } = Args::from_args();
 
     // read the entire stdin buffer to use as the output message
-    let input = if atty::is(atty::Stream::Stdin) {
+    let input = if read_stdin {
         std::io::stdin()
             .lines()
             .flatten()
             .collect::<Vec<_>>()
             .join("\n")
     } else {
-        "".to_string()
+        "job completed.".to_string()
     };
 
     let content = info
