@@ -25,7 +25,7 @@ jobs:
       with:
         # Output target
         RUSTTARGET: x86_64-pc-windows-gnu
-    - name: Rust Release Windows binary
+    - name: Rust Release Linux binary
       uses: rust-build/rust-build.action@v1.4.3
       with:
         # Output target
