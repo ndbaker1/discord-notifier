@@ -8,6 +8,13 @@ anyhow = "1.0.69"
 serde_json = "1.0.94"
 structopt = "0.3.26"
 atty = "0.2.14"
+confy = "0.5.1"
+syn = "2.0.8"
+chrono = "0.4.24"
+
+[dependencies.serde]
+version = "1.0.158"
+features = ["derive"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
