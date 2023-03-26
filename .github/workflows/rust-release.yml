@@ -3,11 +3,13 @@ on:
     branches: [main]
 
 jobs:
-  release-on-push:
-    runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  pre-release:
+    name: "Pre Release"
+    runs-on: "ubuntu-latest"
+
     steps:
-      - uses: rymndhng/release-on-push-action@master
+      - uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          release_name: "latest"
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
+          prerelease: true

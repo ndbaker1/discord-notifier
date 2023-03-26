@@ -1,7 +1,7 @@
 on:
   release:
-    types: [created, edited]
-  
+    types: [released]
+
 jobs:
   release:
     name: release ${{ matrix.target }}
