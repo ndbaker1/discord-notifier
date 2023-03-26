@@ -10,25 +10,25 @@ use structopt::StructOpt;
 
 const APP_NAME: &'static str = "discord-notifier";
 
+/// Send a message to a discord channel using the Discord Bot api (mixed versions)
 #[derive(structopt::StructOpt)]
 struct CliArgs {
-    /// Discord User ID or Channel to send a message to
+    /// channel or user id (depending on if the message is going to a DM or not)
     #[structopt(short = "c", long, env = "DISCORD_CHANNEL_ID")]
     channel_id: Option<String>,
-    /// Discord Bot Token
+    /// token of your discord bot
     #[structopt(short = "t", long, env = "DISCORD_BOT_TOKEN")]
     token: Option<String>,
-    /// Additional header info for the message
+    /// prepend additional text to the message
     #[structopt(short = "p", long)]
     prepend_message: Option<String>,
-    /// Flag to control whether stdin should be read to contruct the message
+    /// read stdin to construct the message content
     #[structopt(short = "i", long)]
     stdin: bool,
-    /// Whether or not the message is a Direct Message or not
+    /// send the message to a direct message channel. (will not work if mismatched)
     #[structopt(short = "d", long)]
     dm: bool,
-
-    /// Whether or to initialize a config file
+    /// initialize a config file containing default values for optional fields
     #[structopt(long)]
     init: bool,
 }
