@@ -29,9 +29,6 @@ struct CliArgs {
     /// token of your discord bot
     #[structopt(short = "t", long, env = "DISCORD_BOT_TOKEN")]
     token: Option<String>,
-    /// prepend additional text to the message
-    #[structopt(short = "p", long)]
-    prepend_message: Option<String>,
     /// read stdin to construct the message content
     #[structopt(short = "i", long)]
     stdin: bool,
@@ -81,19 +78,14 @@ fn main() -> Result<()> {
         .or(None);
 
     // read the entire stdin buffer to use as the output message
-    let input = format!(
-        "completed at {}{}",
+    let content = &format!(
+        "completed {}{}",
         Utc::now().to_rfc2822(),
         match cli_args.stdin {
             true => "\n\n".to_owned() + &read_stdin_string!(),
             false => "".to_owned(),
         }
     );
-
-    let content = &cli_args
-        .prepend_message
-        .map(|info| format_message(&info, &input))
-        .unwrap_or(input);
 
     let token = &cli_args
         .token
@@ -120,6 +112,7 @@ fn main() -> Result<()> {
     }
 }
 
+/// Output prompt to stdout and flush before reading stdin
 fn prompt_enter(prompt: &str) -> Result<String> {
     print!("{prompt}");
     std::io::stdout().flush()?;
@@ -129,10 +122,12 @@ fn prompt_enter(prompt: &str) -> Result<String> {
     Ok(line)
 }
 
-fn format_message(header: &str, input: &str) -> String {
-    format!("> {header}\n```\n{input}\n```")
-}
-
+/// Send a message to a discord user the bot shares a common server with
+///
+/// ## Note
+///
+/// Requires first setting up the shared DM channel, and then using the
+/// returned channel id to send the message content
 fn send_message_dm(
     token: &str,
     user_id: &str,
@@ -172,6 +167,7 @@ fn send_message_dm(
     Ok(())
 }
 
+/// Send a message to a discord channel the bot has access to
 fn send_message_channel(
     token: &str,
     channel_id: &str,
