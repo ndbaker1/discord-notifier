@@ -11,12 +11,12 @@ atty = "0.2.14"
 confy = "0.5.1"
 syn = "2.0.8"
 chrono = "0.4.24"
+# security update
+time = "0.3.20"
 
 [dependencies.serde]
 version = "1.0.158"
 features = ["derive"]
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies.reqwest]
 version = "0.11.14"
