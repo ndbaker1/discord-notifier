@@ -10,6 +10,16 @@ use structopt::StructOpt;
 
 const APP_NAME: &'static str = "discord-notifier";
 
+macro_rules! read_stdin_string {
+    () => {
+        std::io::stdin()
+            .lines()
+            .flatten()
+            .collect::<Vec<_>>()
+            .join("\n")
+    };
+}
+
 /// Send a message to a discord channel using the Discord Bot api (mixed versions)
 #[derive(structopt::StructOpt)]
 struct CliArgs {
@@ -67,7 +77,7 @@ fn main() -> Result<()> {
         "completed at {}{}",
         Utc::now().to_rfc2822(),
         match cli_args.stdin {
-            true => "\n\n".to_owned() + &read_stdin_string(),
+            true => "\n\n".to_owned() + &read_stdin_string!(),
             false => "".to_owned(),
         }
     );
@@ -96,10 +106,9 @@ fn main() -> Result<()> {
     // setup a client to use for HTTP requests
     let client = reqwest::blocking::Client::new();
 
-    if cli_args.dm {
-        send_message_dm(token, channel, content, &client)
-    } else {
-        send_message_channel(token, channel, content, &client)
+    match cli_args.dm {
+        true => send_message_dm(token, channel, content, &client),
+        false => send_message_channel(token, channel, content, &client),
     }
 }
 
@@ -116,14 +125,6 @@ fn format_message(header: &str, input: &str) -> String {
     format!("> {header}\n```\n{input}\n```")
 }
 
-fn read_stdin_string() -> String {
-    std::io::stdin()
-        .lines()
-        .flatten()
-        .collect::<Vec<_>>()
-        .join("\n")
-}
-
 fn send_message_dm(
     token: &str,
     user_id: &str,
@@ -137,6 +138,9 @@ fn send_message_dm(
         ))
         .header("authorization", format!("Bot {token}"))
         .send()?;
+
+    // hoist up any request errors by trying to unwrap the content
+    channel_setup_response.error_for_status_ref()?;
 
     let channel_id = channel_setup_response
         .json::<serde_json::Value>()?
@@ -154,7 +158,8 @@ fn send_message_dm(
             [("content", content)].into_iter(),
         ))
         .header("authorization", format!("Bot {token}"))
-        .send()?;
+        .send()?
+        .error_for_status_ref()?;
 
     Ok(())
 }
@@ -173,7 +178,8 @@ fn send_message_channel(
             [("content", content)].into_iter(),
         ))
         .header("authorization", format!("Bot {token}"))
-        .send()?;
+        .send()?
+        .error_for_status_ref()?;
 
     Ok(())
 }
