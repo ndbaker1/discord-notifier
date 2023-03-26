@@ -1,17 +1,13 @@
-name: Publish Release
-
 on:
   push:
-    branches: [main]
+    branches: [master]
 
 jobs:
-  build:
+  release-on-push:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v3
-      - name: Create a Release
-        uses: elgohr/Github-Release-Action@v4
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: rymndhng/release-on-push-action@master
         with:
-          title: latest
+          release_name: "latest"
