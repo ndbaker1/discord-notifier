@@ -59,8 +59,16 @@ fn main() -> Result<()> {
             APP_NAME,
             None,
             ConfigArgs {
-                channel: Some(prompt_enter("enter default channel ID: ")?),
-                token: Some(prompt_enter("enter default Bot Token: ")?),
+                channel: Some(
+                    prompt_enter("enter default channel ID: ")?
+                        .trim()
+                        .to_string(),
+                ),
+                token: Some(
+                    prompt_enter("enter default Bot Token: ")?
+                        .trim()
+                        .to_string(),
+                ),
             },
         )?;
 
