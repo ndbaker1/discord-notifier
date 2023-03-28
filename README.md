@@ -1,7 +1,7 @@
 <p align="center">
 	<h1 align="center">discord-notifier</h1>
 </p>
-<p align="center">Easily send a discord message to a channel containing the output of a script</p>
+<p align="center">Easily send the output of long task/program to a discord channel</p>
 
 ## Installation 🛠
 
