@@ -8,6 +8,12 @@
 Download the [latest release](https://github.com/ndbaker1/discord-notifier/releases/tag/latest) for your platform and Unzip the executable into any installation directory
 ( `PATH` directories or script directory of your choice )
 
+or install using cargo:
+
+```bash
+cargo install --git https://github.com/ndbaker1/discord-notifier
+```
+
 ## Usage ⚡
 
 ```bash
